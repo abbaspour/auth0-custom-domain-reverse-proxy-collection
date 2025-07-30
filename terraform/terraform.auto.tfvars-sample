@@ -1,0 +1,15 @@
+## RENAME to terraform.auto.tfvars
+## auth0
+auth0_domain         = "xxx.auth0.com"
+auth0_tf_client_id   = "xxx"
+sample-user-password = "long&random-pass!!"
+
+## cloudflare
+cloudflare_email      = "xxx"
+cloudflare_api_key    = "xxx"
+cloudflare_zone_id    = "xxx"
+cloudflare_account_id = "xxx"
+
+## lab
+lab-hostname = "xxx"
+
