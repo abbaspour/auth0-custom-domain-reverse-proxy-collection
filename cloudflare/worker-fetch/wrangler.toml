@@ -1,0 +1,16 @@
+name = "auth0-custom-domain-fetch"
+main = "index.mjs"
+compatibility_date = "2025-07-29"
+
+workers_dev = false
+routes = [
+    { pattern = "cf-fetch.smcd.authlab.work", custom_domain = true }
+]
+
+[observability.logs]
+enabled = true
+
+[vars]
+#AUTH0_EDGE_RECORD = "abbaspour-cd-1xt8o5pwyriel5lb.edge.tenants.auth0.com"  # id.abbaspour.net
+#AUTH0_EDGE_RECORD = "abbaspour-cd-tybl4oekgy5ruoau.edge.tenants.auth0.com"  # id.abbaspour.authlab.work
+#CNAME_API_KEY = "yyy"
