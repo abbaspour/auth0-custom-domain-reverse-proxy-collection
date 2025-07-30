@@ -9,8 +9,3 @@ routes = [
 
 [observability.logs]
 enabled = true
-
-[vars]
-#AUTH0_EDGE_RECORD = "abbaspour-cd-1xt8o5pwyriel5lb.edge.tenants.auth0.com"  # id.abbaspour.net
-#AUTH0_EDGE_RECORD = "abbaspour-cd-tybl4oekgy5ruoau.edge.tenants.auth0.com"  # id.abbaspour.authlab.work
-#CNAME_API_KEY = "yyy"
