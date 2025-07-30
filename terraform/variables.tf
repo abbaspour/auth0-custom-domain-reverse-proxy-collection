@@ -48,3 +48,9 @@ variable "cloudflare_account_id" {
   description = "Cloudflare Account ID"
   type = string
 }
+
+## lab
+variable "lab-hostname" {
+  description = "DNS record for lab environment, running nginx, haproxy, etc locally and port forwarding"
+  type = string
+}

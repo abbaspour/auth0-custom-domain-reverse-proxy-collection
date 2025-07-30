@@ -61,3 +61,5 @@ auth_config.json
 build/
 
 *.pem
+
+nginx.conf
