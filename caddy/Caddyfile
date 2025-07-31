@@ -1,0 +1,41 @@
+# Caddy configuration for Auth0 custom domain reverse proxy
+
+# Global options
+{
+	admin off
+	auto_https off
+	log {
+		output file log/access.log
+		format json
+	}
+}
+
+# HTTP server - redirect to HTTPS
+:8080 {
+	redir https://{host}{uri} permanent
+}
+
+# HTTPS server
+:8443 {
+	tls /etc/letsencrypt/live/{$DOMAIN_NAME}/fullchain.pem /etc/letsencrypt/live/{$DOMAIN_NAME}/privkey.pem
+
+	# Proxy to Auth0
+	reverse_proxy https://{$AUTH0_EDGE_LOCATION} {
+		# Add required headers
+		header_up Host {$AUTH0_EDGE_LOCATION}
+		header_up cname-api-key {$CNAME_API_KEY}
+		header_up X-Real-IP {remote_host}
+
+		# TLS configuration
+		transport http {
+			tls
+			tls_insecure_skip_verify
+		}
+	}
+
+	# Log configuration
+	log {
+		output file log/caddy.log
+		format json
+	}
+}

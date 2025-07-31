@@ -22,16 +22,30 @@ resource "cloudflare_workers_script" "auth0_custom_domain_fetch" {
 
   bindings = [
     {
-      name = "CNAME_API_KEY"
-      type = "secret_text"
-      text = auth0_custom_domain_verification.cf-worker-fetch_verification.cname_api_key
-    },
-    {
       name = "AUTH0_EDGE_LOCATION"
       type = "plain_text"
       text = auth0_custom_domain_verification.cf-worker-fetch_verification.origin_domain_name
+      namespace_id = ""
+    },
+    {
+      name = "CNAME_API_KEY"
+      type = "secret_text"
+      text = auth0_custom_domain_verification.cf-worker-fetch_verification.cname_api_key
+      namespace_id = ""
     }
   ]
+
+  placement = {
+    mode = "smart"
+  }
+
+  migrations = {}
+
+  lifecycle {
+    ignore_changes = [
+      placement
+    ]
+  }
 }
 
 # Configure custom domain for the worker

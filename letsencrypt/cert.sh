@@ -25,6 +25,7 @@ certbot certonly --standalone \
     --non-interactive \
     --agree-tos \
     --email admin@"$DOMAIN_NAME" \
+    --work-dir . \
     -d "$DOMAIN_NAME"
 
 # Check if certificate was obtained successfully
