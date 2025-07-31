@@ -9,27 +9,18 @@ all: run
 
 start: run
 
+# Define repository root (one level up from nginx directory)
+REPO_ROOT = $(shell dirname $(PWD))
+
 LETSENCRYPT_DIR = /etc/letsencrypt/live/$(DOMAIN_NAME)
 
-check-certbot:
-	@which certbot > /dev/null || (echo "Certbot not found. Please install certbot first." && exit 1)
-
-letsencrypt: check-certbot
-	@echo "Creating directories for Let's Encrypt..."
-	@mkdir -p /var/www/letsencrypt/.well-known/acme-challenge
+letsencrypt:
 	@echo "Obtaining Let's Encrypt certificate for $(DOMAIN_NAME)..."
-	@certbot certonly --standalone \
-		--preferred-challenges http \
-		--http-01-port 8080 \
-		--non-interactive \
-		--agree-tos \
-		--email admin@$(DOMAIN_NAME) \
-		-d $(DOMAIN_NAME)
+	@$(REPO_ROOT)/letsencrypt/cert.sh $(DOMAIN_NAME)
 
-renew-cert: check-certbot
+renew-cert:
 	@echo "Renewing Let's Encrypt certificate for $(DOMAIN_NAME)..."
-	@certbot renew
-	@echo "Certificate renewal attempted. Check logs for details."
+	@$(REPO_ROOT)/letsencrypt/renew.sh $(DOMAIN_NAME)
 
 # Run Nginx with the configuration
 run:
@@ -55,8 +46,8 @@ log:
 help:
 	@echo "Available targets:"
 	@echo "  all         - Generate certificate and run Nginx (default)"
-	@echo "  letsencrypt - Obtain a Let's Encrypt SSL certificate (requires domain name in .env)"
-	@echo "  renew-cert  - Renew Let's Encrypt SSL certificate"
+	@echo "  letsencrypt - Obtain a Let's Encrypt SSL certificate using scripts in ../letsencrypt/ (requires domain name in .env)"
+	@echo "  renew-cert  - Renew Let's Encrypt SSL certificate using scripts in ../letsencrypt/"
 	@echo "  run         - Run Nginx on ports 8080 and 8443"
 	@echo "  stop        - Stop Nginx"
 	@echo "  reload      - Reload Nginx configuration"
@@ -64,3 +55,4 @@ help:
 	@echo "  help        - Show this help message"
 	@echo ""
 	@echo "Note: To use Let's Encrypt, set your domain name in the .env file (DOMAIN_NAME=yourdomain.com)"
+	@echo "      Let's Encrypt scripts are now in the top-level letsencrypt/ directory"

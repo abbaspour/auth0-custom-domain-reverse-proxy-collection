@@ -26,11 +26,11 @@ http {
         listen 8080;
         server_name ${DOMAIN_NAME};
         
-        # Let's Encrypt ACME challenge location
-        location /.well-known/acme-challenge/ {
-            root /var/www/letsencrypt;
-            try_files $uri =404;
-        }
+        ## Let's Encrypt ACME challenge location
+        #location /.well-known/acme-challenge/ {
+        #    root /var/www/letsencrypt;
+        #    try_files $uri =404;
+        #}
         
         # Redirect all other HTTP requests to HTTPS
         location / {
@@ -43,8 +43,8 @@ http {
         listen 8443 ssl;
         server_name ${DOMAIN_NAME};
 
-        ssl_certificate     /etc/letsencrypt/live/${DOMAIN_NAME}/fullchain.pem;
-        ssl_certificate_key /etc/letsencrypt/live/${DOMAIN_NAME}/privkey.pem;
+        ssl_certificate     ../letsencrypt/domains/live/${DOMAIN_NAME}/fullchain.pem;
+        ssl_certificate_key ../letsencrypt/domains/live/${DOMAIN_NAME}/privkey.pem;
         ssl_protocols       TLSv1.2 TLSv1.3;
         ssl_ciphers         HIGH:!aNULL:!MD5;
         ssl_prefer_server_ciphers on;

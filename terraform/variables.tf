@@ -54,3 +54,10 @@ variable "lab-hostname" {
   description = "DNS record for lab environment, running nginx, haproxy, etc locally and port forwarding"
   type = string
 }
+
+## shared custom domain top level
+variable "tld" {
+  description = "common DNS TLD for all custom domains"
+  type = string
+  default = "smcd.authlab.work"
+}
