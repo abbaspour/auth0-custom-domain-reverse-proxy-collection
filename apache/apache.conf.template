@@ -1,0 +1,67 @@
+# Apache configuration for Auth0 custom domain reverse proxy
+
+# Load required modules
+LoadModule ssl_module /usr/lib/apache2/modules/mod_ssl.so
+LoadModule proxy_module /usr/lib/apache2/modules/mod_proxy.so
+LoadModule proxy_http_module /usr/lib/apache2/modules/mod_proxy_http.so
+LoadModule headers_module /usr/lib/apache2/modules/mod_headers.so
+LoadModule rewrite_module /usr/lib/apache2/modules/mod_rewrite.so
+LoadModule mpm_event_module /usr/lib/apache2/modules/mod_mpm_event.so
+LoadModule authz_core_module /usr/lib/apache2/modules/mod_authz_core.so
+
+PidFile "./log/apache.pid"
+
+# Global configuration
+ServerName ${DOMAIN_NAME}
+Listen 8080
+Listen 8443
+
+User amin
+Group amin
+
+# Log configuration
+ErrorLog log/error.log
+LogLevel warn
+LogFormat "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"" combined
+CustomLog log/access.log combined
+
+# HTTP server - redirect to HTTPS
+<VirtualHost *:8080>
+    ServerName ${DOMAIN_NAME}
+    
+    # Redirect all HTTP traffic to HTTPS
+    RewriteEngine On
+    RewriteRule ^(.*)$ https://%{HTTP_HOST}$1 [R=301,L]
+</VirtualHost>
+
+# HTTPS server
+<VirtualHost *:8443>
+    ServerName ${DOMAIN_NAME}
+    
+    # SSL Configuration
+    SSLEngine on
+    SSLCertificateFile ./fullchain.pem
+    SSLCertificateKeyFile ./privkey.pem
+    SSLProtocol all -SSLv2 -SSLv3 -TLSv1 -TLSv1.1
+    SSLCipherSuite HIGH:!aNULL:!MD5
+    SSLHonorCipherOrder on
+    
+    # Proxy configuration
+    ProxyRequests Off
+    ProxyPreserveHost Off
+    
+    # Set headers for Auth0
+    RequestHeader set Host "${AUTH0_EDGE_LOCATION}"
+    RequestHeader set cname-api-key "${CNAME_API_KEY}"
+    RequestHeader set X-Forwarded-Proto "https"
+    
+    # Proxy all requests to Auth0 edge location
+    ProxyPass / https://${AUTH0_EDGE_LOCATION}/
+    ProxyPassReverse / https://${AUTH0_EDGE_LOCATION}/
+    
+    # Additional proxy settings
+    SSLProxyEngine On
+    SSLProxyVerify none
+    SSLProxyCheckPeerCN off
+    SSLProxyCheckPeerName off
+</VirtualHost>
