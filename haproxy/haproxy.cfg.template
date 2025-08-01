@@ -56,7 +56,6 @@ frontend http-in
 
 # HTTPS frontend
 frontend https-in
-    #bind *:8443 ssl crt /etc/letsencrypt/live/${DOMAIN_NAME}/fullchain-privkey.pem
     bind *:8443 ssl crt ./fullchain-privkey.pem
     mode http
     option httplog
@@ -92,9 +91,9 @@ backend auth0_backend
     retries 3
     
     # Health check settings
-    http-check send meth GET uri /test
+    http-check connect ssl
+    http-check send meth GET uri /test hdr Host ${AUTH0_EDGE_LOCATION} hdr cname-api-key ${CNAME_API_KEY}
     http-check expect status 200
 
     # Enable SSL for the backend with additional options
-    # sni str(${AUTH0_EDGE_LOCATION})
-    server auth0 ${AUTH0_EDGE_LOCATION}:443 ssl verify none check inter 5s rise 2 fall 3 ciphers ECDHE+AESGCM:!ECDSA
+    server auth0 ${AUTH0_EDGE_LOCATION}:443 ssl verify none check-sni ${AUTH0_EDGE_LOCATION} inter 5s rise 2 fall 3 sni str(${AUTH0_EDGE_LOCATION})
