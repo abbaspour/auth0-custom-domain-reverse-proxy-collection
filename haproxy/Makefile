@@ -1,4 +1,4 @@
-.PHONY: all run clean log
+.PHONY: run log help
 
 # Load environment variables
 include .env
@@ -20,34 +20,15 @@ run:
 	@echo "Starting HAProxy on ports 8080 (HTTP) and 8443 (HTTPS)..."
 	@haproxy -f $(PWD)/haproxy.cfg -p $(PWD)/haproxy.pid -db
 
-# Stop HAProxy
-stop:
-	@echo "Stopping HAProxy..."
-	@if [ -f $(PWD)/haproxy.pid ]; then \
-		kill -TERM `cat $(PWD)/haproxy.pid` || true; \
-		rm -f $(PWD)/haproxy.pid; \
-	else \
-		echo "HAProxy is not running or PID file not found"; \
-	fi
-
-# Reload HAProxy configuration
-reload:
-	@echo "Reloading HAProxy configuration..."
-	@if [ -f $(PWD)/haproxy.pid ]; then \
-		haproxy -f $(PWD)/haproxy.cfg -p $(PWD)/haproxy.pid -sf `cat $(PWD)/haproxy.pid`; \
-	else \
-		echo "HAProxy is not running or PID file not found"; \
-		$(MAKE) run; \
-	fi
-
 log:
-	tail -f log/*
+	@mkdir -p $(PWD)/log
+	@touch $(PWD)/log/haproxy.log
+	@tail -f log/*
 
 # Help
 help:
 	@echo "Available targets:"
+	@echo "  all/start   - Run HAProxy (default)"
 	@echo "  run         - Run HAProxy on ports 8080 and 8443"
-	@echo "  stop        - Stop HAProxy"
-	@echo "  reload      - Reload HAProxy configuration"
-	@echo "  clean       - Stop HAProxy and remove certificates"
+	@echo "  log         - View logs"
 	@echo "  help        - Show this help message"
