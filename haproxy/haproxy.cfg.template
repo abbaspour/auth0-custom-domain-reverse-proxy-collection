@@ -35,7 +35,7 @@ listen stats
     stats enable
     stats uri /stats
     stats refresh 10s
-    stats auth admin:password # Replace with your desired username and password
+    stats auth amin:${HAPROXY_ADMIN_PASS}
     stats realm Haproxy\ Statistics
     stats admin if LOCALHOST
 
@@ -56,15 +56,20 @@ frontend http-in
 
 # HTTPS frontend
 frontend https-in
-    bind *:8443 ssl crt /etc/letsencrypt/live/${DOMAIN_NAME}/fullchain-privkey.pem
+    #bind *:8443 ssl crt /etc/letsencrypt/live/${DOMAIN_NAME}/fullchain-privkey.pem
+    bind *:8443 ssl crt ./fullchain-privkey.pem
     mode http
     option httplog
 
     # Define hosts
-    #acl host_domain hdr(host) -i ${DOMAIN_NAME}
+    acl host_domain hdr(host) -i ${DOMAIN_NAME}
     
     # Use the domain backend
     use_backend auth0_backend if host_domain
+
+resolvers cfdns
+  nameserver ns1 1.1.1.1:53
+  nameserver ns2 1.0.0.1:53
 
 # Backend for Auth0
 backend auth0_backend
@@ -91,4 +96,5 @@ backend auth0_backend
     http-check expect status 200
 
     # Enable SSL for the backend with additional options
-    server auth0 ${AUTH0_EDGE_LOCATION}:443 ssl verify none maxconn 100 check inter 5s rise 2 fall 3 req.hdr(host)
+    # sni str(${AUTH0_EDGE_LOCATION})
+    server auth0 ${AUTH0_EDGE_LOCATION}:443 ssl verify none check inter 5s rise 2 fall 3 ciphers ECDHE+AESGCM:!ECDSA

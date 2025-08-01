@@ -1,14 +1,18 @@
+locals {
+  haproxy_domain = "haproxy.${var.tld}"
+}
+
 // -- haproxy --
 resource "cloudflare_dns_record" "haproxy" {
   zone_id = var.cloudflare_zone_id
   type = "CNAME"
-  name = "haproxy.${var.tld}"
+  name = local.haproxy_domain
   ttl     = 300
   content = "lab.${var.tld}"
 }
 
 resource "auth0_custom_domain" "haproxy" {
-  domain = "haproxy.${var.tld}"
+  domain = local.haproxy_domain
   type   = "self_managed_certs"
 }
 
@@ -32,6 +36,36 @@ resource "local_file" "haproxy-dot_env" {
   content  = <<-EOT
 CNAME_API_KEY=${auth0_custom_domain_verification.haproxy_verification.cname_api_key}
 AUTH0_EDGE_LOCATION=${auth0_custom_domain_verification.haproxy_verification.origin_domain_name}
-DOMAIN_NAME=haproxy.${var.tld}
+DOMAIN_NAME=${local.haproxy_domain}
 EOT
 }
+
+// -- tls --
+resource "acme_registration" "haproxy_reg" {
+  account_key_pem = tls_private_key.account_private_key.private_key_pem
+  email_address   = "admin@${local.haproxy_domain}"
+}
+
+resource "acme_certificate" "haproxy_certificate" {
+  account_key_pem           = acme_registration.haproxy_reg.account_key_pem
+  common_name               = local.haproxy_domain
+  subject_alternative_names = [local.haproxy_domain]
+
+  dns_challenge {
+    provider = "cloudflare"
+    config = {
+      CF_API_EMAIL = var.cloudflare_email
+      CF_API_KEY = var.cloudflare_api_key
+      CF_ZONE_API_KEY = var.cloudflare_zone_id
+    }
+  }
+
+  min_days_remaining = 30
+}
+
+resource "local_file" "haproxy_fullchain_private_key" {
+  content  = "${acme_certificate.haproxy_certificate.certificate_pem}${acme_certificate.haproxy_certificate.issuer_pem}${acme_certificate.haproxy_certificate.private_key_pem}"
+  filename = "${path.cwd}/../haproxy/fullchain-privkey.pem"
+  file_permission = "600"
+}
+

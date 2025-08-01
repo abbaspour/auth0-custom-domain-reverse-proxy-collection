@@ -10,6 +10,18 @@ terraform {
       source = "cloudflare/cloudflare"
       version = "~> 5.7.1"
     }
+    acme = {
+      source  = "vancluever/acme"
+      version = "~> 2.35"
+    }
+    tls = {
+      source  = "hashicorp/tls"
+      version = "~> 4.1"
+    }
+    local = {
+      source  = "hashicorp/local"
+      version = "~> 2.5"
+    }
   }
 }
 
@@ -23,4 +35,13 @@ provider "auth0" {
 provider "cloudflare" {
   email   = var.cloudflare_email
   api_key = var.cloudflare_api_key
+}
+
+provider "acme" {
+  server_url = "https://acme-v02.api.letsencrypt.org/directory"
+}
+
+resource "tls_private_key" "account_private_key" {
+  algorithm   = "ECDSA"
+  ecdsa_curve = "P256"
 }
