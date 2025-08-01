@@ -1,19 +1,19 @@
 locals {
-  domain = "nginx.${var.tld}"
+  nginx_domain = "nginx.${var.tld}"
 }
 
 // -- nginx server --
 resource "cloudflare_dns_record" "nginx" {
   zone_id = var.cloudflare_zone_id
   type    = "CNAME"
-  name    = local.domain
+  name    = local.nginx_domain
   ttl     = 300
   content = "lab.${var.tld}"
 }
 
 // -- auth0 --
 resource "auth0_custom_domain" "nginx" {
-  domain = local.domain
+  domain = local.nginx_domain
   type   = "self_managed_certs"
 }
 
@@ -37,27 +37,20 @@ resource "local_file" "nginx-dot_env" {
   content         = <<-EOT
 CNAME_API_KEY=${auth0_custom_domain_verification.nginx_verification.cname_api_key}
 AUTH0_EDGE_LOCATION=${auth0_custom_domain_verification.nginx_verification.origin_domain_name}
-DOMAIN_NAME=${local.domain}
+DOMAIN_NAME=${local.nginx_domain}
 EOT
 }
 
 // -- tls --
 resource "acme_registration" "nginx_reg" {
   account_key_pem = tls_private_key.account_private_key.private_key_pem
-  email_address   = "admin@${local.domain}"
+  email_address   = "admin@${local.nginx_domain}"
 }
-
-# resource "tls_private_key" "nginx_private_key" {
-#   algorithm   = "ECDSA"
-#   ecdsa_curve = "P256"
-# }
 
 resource "acme_certificate" "nginx_certificate" {
   account_key_pem           = acme_registration.nginx_reg.account_key_pem
-  common_name               = local.domain
-  subject_alternative_names = [local.domain]
-
-  #private_key_pem = tls_private_key.nginx_private_key.private_key_pem
+  common_name               = local.nginx_domain
+  subject_alternative_names = [local.nginx_domain]
 
   dns_challenge {
     provider = "cloudflare"
@@ -73,7 +66,6 @@ resource "acme_certificate" "nginx_certificate" {
 
 
 resource "local_file" "nginx_private_key" {
-  #content  = tls_private_key.nginx_private_key.private_key_pem
   content = acme_certificate.nginx_certificate.private_key_pem
   filename = "${path.cwd}/../nginx/privkey.pem"
   file_permission = "600"

@@ -30,7 +30,7 @@ prepare:
 run: prepare
 	@mkdir -p $(PWD)/log
 	@echo "Starting Caddy on ports 8080 (HTTP) and 8443 (HTTPS)..."
-	@caddy start --config $(PWD)/Caddyfile --adapter caddyfile --envfile $(PWD)/.env 2>&1 | tee $(PWD)/log/caddy.log &
+	@caddy run --config $(PWD)/Caddyfile --adapter caddyfile --envfile $(PWD)/.env 2>&1 | tee $(PWD)/log/caddy.log
 	@echo $! > $(PWD)/caddy.pid
 
 # Stop Caddy

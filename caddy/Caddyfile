@@ -17,7 +17,8 @@
 
 # HTTPS server
 :8443 {
-	tls /etc/letsencrypt/live/{$DOMAIN_NAME}/fullchain.pem /etc/letsencrypt/live/{$DOMAIN_NAME}/privkey.pem
+	#tls /etc/letsencrypt/live/{$DOMAIN_NAME}/fullchain.pem /etc/letsencrypt/live/{$DOMAIN_NAME}/privkey.pem
+	tls ./fullchain.pem ./privkey.pem
 
 	# Proxy to Auth0
 	reverse_proxy https://{$AUTH0_EDGE_LOCATION} {
