@@ -75,9 +75,3 @@ resource "local_file" "caddy_fullchain" {
   filename = "${path.cwd}/../caddy/fullchain.pem"
   file_permission = "600"
 }
-
-resource "local_file" "caddy_certificate" {
-  content  = acme_certificate.caddy_certificate.certificate_pem
-  filename = "${path.cwd}/../caddy/certificate.pem"
-  file_permission = "600"
-}

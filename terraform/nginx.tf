@@ -77,8 +77,3 @@ resource "local_file" "nginx_fullchain" {
   file_permission = "600"
 }
 
-resource "local_file" "nginx_certificate" {
-  content  = acme_certificate.nginx_certificate.certificate_pem
-  filename = "${path.cwd}/../nginx/certificate.pem"
-  file_permission = "600"
-}
