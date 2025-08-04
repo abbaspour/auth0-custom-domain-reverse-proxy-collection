@@ -60,10 +60,10 @@ All hosted reverse proxy server been test on Linux Mint 22.1.
 
 | Reverse Proxy | Tested version   | Client IP Header   | 
 |---------------|------------------|--------------------| 
-| Apache2       | 2.4.58           | `true-client-ip`   |
-| Caddy         | 2.6.2            | `true-client-ip`   |
-| Nginx         | 1.24.0           | `true-client-ip`   |
-| HAProxy       | 2.8.5-1ubuntu3.3 | `true-client-ip`   |
+| Apache2       | 2.4.58           | `x-forwarded-for`  |
+| Caddy         | 2.6.2            | `x-forwarded-for`  |
+| Nginx         | 1.24.0           | `x-forwarded-for`  |
+| HAProxy       | 2.8.5-1ubuntu3.3 | `x-forwarded-for`  |
 | Cloudflare    | -                | `cf-connecting-ip` |
 
 ## Reference API

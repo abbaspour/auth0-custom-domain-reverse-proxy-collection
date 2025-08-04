@@ -29,6 +29,7 @@ resource "cloudflare_dns_record" "nginx" {
 resource "auth0_custom_domain" "nginx" {
   domain = local.nginx_domain
   type   = "self_managed_certs"
+  custom_client_ip_header = "x-forwarded-for"
   domain_metadata = {
     server = "nginx"
   }

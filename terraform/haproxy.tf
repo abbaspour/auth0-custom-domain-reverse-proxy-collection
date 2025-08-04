@@ -28,6 +28,7 @@ resource "cloudflare_dns_record" "haproxy" {
 resource "auth0_custom_domain" "haproxy" {
   domain = local.haproxy_domain
   type   = "self_managed_certs"
+  custom_client_ip_header = "x-forwarded-for"
   domain_metadata = {
     server = "haproxy"
   }

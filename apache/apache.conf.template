@@ -67,7 +67,7 @@ CustomLog log/access.log combined
     # Set headers for Auth0
     RequestHeader set Host "${AUTH0_EDGE_LOCATION}"
     RequestHeader set cname-api-key "${CNAME_API_KEY}"
-    RequestHeader set X-Forwarded-Proto "https"
+    RequestHeader set X-Forwarded-For "%{REMOTE_ADDR}e"
     
     # Proxy all requests to Auth0 edge location
     ProxyPass / https://${AUTH0_EDGE_LOCATION}/

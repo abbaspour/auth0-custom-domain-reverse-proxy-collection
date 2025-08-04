@@ -76,6 +76,7 @@ resource "cloudflare_workers_custom_domain" "auth0_custom_domain_fetch" {
 resource "auth0_custom_domain" "cf-worker-fetch" {
   domain = "cf-fetch.${var.tld}"
   type   = "self_managed_certs"
+  custom_client_ip_header = "cf-connecting-ip"
   domain_metadata = {
     server = "cloudflare"
   }
