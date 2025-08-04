@@ -58,12 +58,18 @@ All hosted reverse proxy server been test on Linux Mint 22.1.
 
 ![Lab Setup](./diagrams/lab.png)
 
-| Reverse Proxy | Tested version   |
-|---------------|------------------|
-| Apache2       | 2.4.58           |
-| Caddy         | 2.6.2            |
-| Nginx         | 1.24.0           |
-| HAProxy       | 2.8.5-1ubuntu3.3 | 
+| Reverse Proxy | Tested version   | Client IP Header   | 
+|---------------|------------------|--------------------| 
+| Apache2       | 2.4.58           | `true-client-ip`   |
+| Caddy         | 2.6.2            | `true-client-ip`   |
+| Nginx         | 1.24.0           | `true-client-ip`   |
+| HAProxy       | 2.8.5-1ubuntu3.3 | `true-client-ip`   |
+| Cloudflare    | -                | `cf-connecting-ip` |
+
+## Reference API
+
+See [Custom Domains management API](https://auth0.com/docs/api/management/v2/custom-domains/get-custom-domains) for
+reference.
 
 ## Terraform Examples
 

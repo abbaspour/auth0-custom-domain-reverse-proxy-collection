@@ -28,6 +28,9 @@ resource "cloudflare_dns_record" "haproxy" {
 resource "auth0_custom_domain" "haproxy" {
   domain = local.haproxy_domain
   type   = "self_managed_certs"
+  domain_metadata = {
+    server = "haproxy"
+  }
 }
 
 resource "cloudflare_dns_record" "haproxy_verification_record" {

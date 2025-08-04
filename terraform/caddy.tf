@@ -28,6 +28,9 @@ resource "cloudflare_dns_record" "caddy" {
 resource "auth0_custom_domain" "caddy" {
   domain = local.caddy_domain
   type   = "self_managed_certs"
+  domain_metadata = {
+    server = "caddy"
+  }
 }
 
 resource "cloudflare_dns_record" "caddy_verification_record" {
