@@ -2,6 +2,10 @@
 
 This directory contains the configuration for running an Nginx reverse proxy with SSL support, including Let's Encrypt for free valid SSL certificates.
 
+> **Tested with Nginx version:** 1.24.0
+
+[Return to main README](../README.md)
+
 ## Prerequisites
 
 - Nginx installed on your system

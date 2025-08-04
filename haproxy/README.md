@@ -2,6 +2,10 @@
 
 This directory contains the configuration for using HAProxy as a reverse proxy for Auth0 custom domains.
 
+> **Tested with HAProxy version:** 2.8.5
+
+[Return to main README](../README.md)
+
 ## Overview
 
 HAProxy is configured to:

@@ -2,6 +2,10 @@
 
 This directory contains the configuration for using Caddy as a reverse proxy for Auth0 custom domains.
 
+> **Tested with Caddy version:** 2.6.2
+
+[Return to main README](../README.md)
+
 ## Overview
 
 Caddy is configured to:
@@ -13,7 +17,6 @@ Caddy is configured to:
 ## Prerequisites
 
 - Caddy installed on your system
-- Let's Encrypt certificates for your domain
 - Environment variables set in `.env` file (created by Terraform)
 
 ## Setup

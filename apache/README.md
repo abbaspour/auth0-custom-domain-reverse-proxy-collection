@@ -2,6 +2,10 @@
 
 This directory contains the configuration for running an Apache reverse proxy with SSL support, including Let's Encrypt for free valid SSL certificates.
 
+> **Tested with Apache version:** 2.4.58
+
+[Return to main README](../README.md)
+
 ## Prerequisites
 
 - Apache HTTP Server installed on your system
