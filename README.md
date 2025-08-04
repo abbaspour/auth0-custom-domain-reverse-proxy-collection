@@ -18,6 +18,19 @@ Each proxy folder contains specific configuration files, setup instructions, and
 
 ## How It Works
 
+### Traffic Flow
+
+The following diagram shows how live traffic flows between client applications, the reverse proxy, and Auth0:
+
+![Traffic Flow](./diagrams/traffic.png)
+
+When a user accesses your application:
+
+1. Client application lookups custom domain address from DNS
+2. Client opens HTTPS connection reverse proxy (RP)
+3. RP terminates TLS, adds headers to HTTP request and proxies them to edge location
+4. Edge location validates input request and sends request to target tenant.
+
 ### Registration
 
 The following diagram illustrates how to set up a custom domain with Auth0:
@@ -35,19 +48,6 @@ The setup process involves:
 7. Admin updates reverse proxy with values from step 6
 8. Admin updates DNS so that custom-domain point to reverse proxy
 
-### Traffic Flow
-
-The following diagram shows how live traffic flows between client applications, the reverse proxy, and Auth0:
-
-![Traffic Flow](./diagrams/traffic.png)
-
-When a user accesses your application:
-
-1. Client application lookups custom domain address from DNS
-2. Client opens HTTPS connection reverse proxy (RP)
-3. RP terminates TLS, adds headers to HTTP request and proxies them to edge location
-4. Edge location validates input request and sends request to target tenant.
-
 ### TLS Termination
 
 This project is using free TLS certificates from [Let's Encrypt](https://letsencrypt.org/).
@@ -60,7 +60,7 @@ All hosted reverse proxy server been test on Linux Mint 22.1.
 
 | Reverse Proxy | Tested version   |
 |---------------|------------------|
-| Apache 2      | 2.4.58           |
+| Apache2       | 2.4.58           |
 | Caddy         | 2.6.2            |
 | Nginx         | 1.24.0           |
 | HAProxy       | 2.8.5-1ubuntu3.3 | 

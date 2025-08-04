@@ -11,13 +11,11 @@ This directory contains the configuration for using HAProxy as a reverse proxy f
 HAProxy is configured to:
 - Listen on port 8080 for HTTP traffic and redirect it to HTTPS
 - Listen on port 8443 for HTTPS traffic and proxy it to Auth0
-- Use Let's Encrypt SSL certificates
 - Add the required `cname-api-key` header to requests to Auth0
 
 ## Prerequisites
 
 - HAProxy installed on your system
-- Let's Encrypt certificates for your domain
 - Environment variables set in `.env` file (created by Terraform)
 
 ## Setup
@@ -28,20 +26,14 @@ HAProxy is configured to:
    terraform apply
    ```
 
-2. Obtain a Let's Encrypt certificate for your domain:
-   ```
-   cd letsencrypt
-   ./cert <domain>
-   ```
-
-3. Start HAProxy:
+2. Start HAProxy:
    ```
    make run
    ```
 
 ## Available Commands
 
-- `make` or `make all` - Generate certificate and run HAProxy
+- `make` or `make all` - Run HAProxy
 - `make run` - Run HAProxy on ports 8080 and 8443
 - `make stop` - Stop HAProxy
 - `make reload` - Reload HAProxy configuration
@@ -63,13 +55,12 @@ The following environment variables are required:
 
 These variables are automatically set in the `.env` file by Terraform.
 
-## SSL Certificates
+## SSL/TLS Certificates
 
-HAProxy requires a single file containing both the certificate and private key. The Makefile automatically concatenates the Let's Encrypt certificate and private key files into a single file for HAProxy.
+SSL/TLS certificates are managed by Terraform. HAProxy uses the certificates that are generated and managed by the Terraform configuration.
 
 ## Troubleshooting
 
 - Check the logs with `make log`
 - Ensure the `.env` file exists and contains the required variables
-- Verify that the SSL certificates exist in the expected location
 - Make sure HAProxy is installed and available in your PATH
