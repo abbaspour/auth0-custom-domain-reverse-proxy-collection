@@ -2,18 +2,20 @@
 
 This directory contains the configuration for using Caddy as a reverse proxy for Auth0 custom domains.
 
+> **Tested with Caddy version:** 2.6.2
+
+[Return to main README](../README.md)
+
 ## Overview
 
 Caddy is configured to:
 - Listen on port 8080 for HTTP traffic and redirect it to HTTPS
 - Listen on port 8443 for HTTPS traffic and proxy it to Auth0
-- Use Let's Encrypt SSL certificates
 - Add the required `cname-api-key` header to requests to Auth0
 
 ## Prerequisites
 
 - Caddy installed on your system
-- Let's Encrypt certificates for your domain
 - Environment variables set in `.env` file (created by Terraform)
 
 ## Setup
@@ -24,22 +26,14 @@ Caddy is configured to:
    terraform apply
    ```
 
-2. Obtain a Let's Encrypt certificate for your domain:
-   ```
-   cd ../letsencrypt
-   ./cert.sh <domain>
-   ```
-
-3. Start Caddy:
+2. Start Caddy:
    ```
    make run
    ```
 
 ## Available Commands
 
-- `make` or `make all` - Generate certificate and run Caddy
-- `make letsencrypt` - Obtain a Let's Encrypt SSL certificate
-- `make renew-cert` - Renew Let's Encrypt SSL certificate
+- `make` or `make all` - Run Caddy
 - `make run` - Run Caddy on ports 8080 and 8443
 - `make stop` - Stop Caddy
 - `make reload` - Reload Caddy configuration
@@ -61,13 +55,12 @@ The following environment variables are required:
 
 These variables are automatically set in the `.env` file by Terraform.
 
-## SSL Certificates
+## SSL/TLS Certificates
 
-Caddy is configured to use Let's Encrypt certificates from the standard location. The certificates are obtained using the scripts in the `../letsencrypt/` directory.
+SSL/TLS certificates are managed by Terraform. Caddy uses the certificates that are generated and managed by the Terraform configuration.
 
 ## Troubleshooting
 
 - Check the logs with `make log`
 - Ensure the `.env` file exists and contains the required variables
-- Verify that the SSL certificates exist in the expected location
 - Make sure Caddy is installed and available in your PATH

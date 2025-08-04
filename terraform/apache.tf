@@ -28,6 +28,10 @@ resource "cloudflare_dns_record" "apache" {
 resource "auth0_custom_domain" "apache" {
   domain = local.apache_domain
   type   = "self_managed_certs"
+  custom_client_ip_header = "x-forwarded-for"
+  domain_metadata = {
+    server = "apache"
+  }
 }
 
 resource "cloudflare_dns_record" "apache_verification_record" {

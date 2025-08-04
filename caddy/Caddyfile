@@ -39,7 +39,6 @@
 		# Add required headers
 		header_up Host {$AUTH0_EDGE_LOCATION}
 		header_up cname-api-key {$CNAME_API_KEY}
-		header_up X-Real-IP {remote_host}
 
 		# TLS configuration
 		transport http {
