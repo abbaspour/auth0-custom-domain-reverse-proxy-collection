@@ -27,13 +27,6 @@ resource "cloudflare_workers_script" "auth0_custom_domain_fetch" {
   main_module        = "index.mjs"
   compatibility_date = "2025-07-29"
 
-  /*
-  observability = {
-    enabled            = true
-    head_sampling_rate = 1
-  }
-  */
-
   bindings = [
     {
       name = "AUTH0_EDGE_LOCATION"
@@ -78,7 +71,7 @@ resource "auth0_custom_domain" "cf-worker-fetch" {
   type   = "self_managed_certs"
   custom_client_ip_header = "cf-connecting-ip"
   domain_metadata = {
-    server = "cloudflare"
+    server = "cloudflare-worker-fetch"
   }
 }
 

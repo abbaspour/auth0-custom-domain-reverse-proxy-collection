@@ -1,0 +1,52 @@
+/*
+ * Copyright 2025 Auth0 Product Architecture Team
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+import {Context, Hono} from 'hono';
+
+/**
+ * Environment variables interface for the worker
+ *
+ * CNAME_API_KEY: API key for the Auth0 custom domain
+ * AUTH0_EDGE_LOCATION: Hostname of the backend Auth0 edge location
+ */
+interface Env {
+  Bindings: {
+    CNAME_API_KEY: string;
+    AUTH0_EDGE_LOCATION: string;
+  };
+}
+
+const app = new Hono<Env>();
+
+app.onError((err, c) => {
+  return c.text(`Internal Server Error: ${err.message}`, 500);
+});
+
+async function proxy(c: Context<Env>): Promise<Response> {
+  const url = new URL(c.req.raw.url);
+  url.hostname = c.env.AUTH0_EDGE_LOCATION;
+
+  const newRequest = new Request(url, c.req.raw);
+  newRequest.headers.set('cname-api-key', c.env.CNAME_API_KEY);
+  return await fetch(newRequest);
+}
+
+app.all('/*', async (c) => {
+  return proxy(c);
+});
+
+// noinspection JSUnusedGlobalSymbols
+export default app;
