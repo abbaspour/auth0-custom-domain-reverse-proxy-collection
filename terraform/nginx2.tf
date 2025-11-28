@@ -31,7 +31,8 @@ resource "local_file" "nginx2-dot_env" {
   content         = <<-EOT
 CNAME_API_KEY=${auth0_custom_domain_verification.nginx_verification.cname_api_key}
 AUTH0_EDGE_LOCATION=${auth0_custom_domain_verification.nginx_verification.origin_domain_name}
-DOMAIN_NAME=${local.nginx2_domain}
+DOMAIN_NAME=${local.nginx_domain}
+DOMAIN2_NAME=${local.nginx2_domain}
 EOT
 }
 
@@ -59,14 +60,26 @@ resource "acme_certificate" "nginx2_certificate" {
 }
 
 
+resource "local_file" "nginx_private_key-in-nginx2" {
+  content = acme_certificate.nginx_certificate.private_key_pem
+  filename = "${path.cwd}/../nginx2/privkey.pem"
+  file_permission = "600"
+}
+
+resource "local_file" "nginx_fullchain-in-nginx2" {
+  content  = "${acme_certificate.nginx_certificate.certificate_pem}${acme_certificate.nginx_certificate.issuer_pem}"
+  filename = "${path.cwd}/../nginx2/fullchain.pem"
+  file_permission = "600"
+}
+
 resource "local_file" "nginx2_private_key" {
   content = acme_certificate.nginx2_certificate.private_key_pem
-  filename = "${path.cwd}/../nginx2/privkey.pem"
+  filename = "${path.cwd}/../nginx2/privkey2.pem"
   file_permission = "600"
 }
 
 resource "local_file" "nginx2_fullchain" {
   content  = "${acme_certificate.nginx2_certificate.certificate_pem}${acme_certificate.nginx2_certificate.issuer_pem}"
-  filename = "${path.cwd}/../nginx2/fullchain.pem"
+  filename = "${path.cwd}/../nginx2/fullchain2.pem"
   file_permission = "600"
 }

@@ -39,7 +39,17 @@ http {
     server {
         listen 8080;
         server_name ${DOMAIN_NAME};
-        
+
+        # Redirect all other HTTP requests to HTTPS
+        location / {
+            return 301 https://$host$request_uri;
+        }
+    }
+
+    server {
+        listen 8080;
+        server_name ${DOMAIN2_NAME};
+
         # Redirect all other HTTP requests to HTTPS
         location / {
             return 301 https://$host$request_uri;
@@ -53,6 +63,33 @@ http {
 
         ssl_certificate     ./fullchain.pem;
         ssl_certificate_key ./privkey.pem;
+        ssl_protocols       TLSv1.2 TLSv1.3;
+        ssl_ciphers         HIGH:!aNULL:!MD5;
+        ssl_prefer_server_ciphers on;
+        ssl_session_cache shared:SSL:10m;
+        ssl_session_timeout 10m;
+
+        # Proxy all requests to Auth0 edge location
+        location / {
+            proxy_ssl_server_name on;
+
+            proxy_pass https://${AUTH0_EDGE_LOCATION};
+
+            proxy_set_header Host ${AUTH0_EDGE_LOCATION};
+            proxy_set_header cname-api-key ${CNAME_API_KEY};
+
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        }
+    }
+
+
+    # HTTPS server
+    server {
+        listen 8443 ssl;
+        server_name ${DOMAIN2_NAME};
+
+        ssl_certificate     ./fullchain2.pem;
+        ssl_certificate_key ./privkey2.pem;
         ssl_protocols       TLSv1.2 TLSv1.3;
         ssl_ciphers         HIGH:!aNULL:!MD5;
         ssl_prefer_server_ciphers on;
