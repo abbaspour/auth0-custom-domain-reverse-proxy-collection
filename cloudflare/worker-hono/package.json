@@ -1,0 +1,32 @@
+{
+    "name": "auth0-mcd-federation-migration",
+    "version": "0.1.0",
+    "description": "Cloudflare worker with Hono as Auth0 custom domain reverse proxy",
+    "main": "index.ts",
+    "scripts": {
+        "dev": "wrangler dev",
+        "deploy": "wrangler deploy",
+        "build": "tsc",
+        "compile": "tsc --noEmit",
+        "lint": "eslint .",
+        "lint:fix": "eslint . --fix",
+        "format": "prettier --write ."
+    },
+    "dependencies": {
+        "hono": "^4.8.5"
+    },
+    "author": {
+        "name": "Amin Abbaspour",
+        "email": "support@auth0.com"
+    },
+    "devDependencies": {
+        "@cloudflare/workers-types": "^4.20250722.0",
+        "@eslint/js": "^9.31.0",
+        "eslint": "^9.31.0",
+        "eslint-config-prettier": "^10.1.8",
+        "prettier": "^3.6.2",
+        "typescript": "^5.8.3",
+        "typescript-eslint": "^8.38.0",
+        "wrangler": "^4.51.0"
+    }
+}
