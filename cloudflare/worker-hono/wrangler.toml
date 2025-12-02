@@ -1,0 +1,13 @@
+name = "auth0-custom-domain-hono"
+main = "./index.ts"
+compatibility_date = "2025-12-01"
+workers_dev = false
+
+[build]
+    command = "npm run build"
+
+[observability]
+enabled = true
+head_sampling_rate = 1
+
+[vars]
