@@ -75,3 +75,10 @@ variable "tld" {
   type = string
   default = "smcd.authlab.work"
 }
+
+## aws
+variable "aws_region" {
+  description = "AWS region to deploy API Gateway"
+  type        = string
+  default     = "ap-southeast-2"  # sydney
+}
