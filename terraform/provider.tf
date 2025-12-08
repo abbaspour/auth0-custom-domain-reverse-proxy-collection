@@ -63,6 +63,12 @@ provider "aws" {
   region = var.aws_region
 }
 
+// Alias provider for resources that must be created in us-east-1 (e.g., CloudFront ACM certs)
+provider "aws" {
+  alias  = "us_east_1"
+  region = "us-east-1"
+}
+
 provider "acme" {
   server_url = "https://acme-v02.api.letsencrypt.org/directory"
 }

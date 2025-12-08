@@ -13,7 +13,9 @@ This repository includes configuration examples for the following reverse proxie
 - [Caddy](./caddy/README.md)
 - [HAProxy](./haproxy/README.md)
 - [Cloudflare](./cloudflare/README.md)
-- [AWS](./terraform/aws-api-gateway.tf)
+- AWS
+  - [API Gateway](./terraform/aws-api-gateway.tf)
+  - [CloudFront](./terraform/aws-cloudfront.tf)
 - [Akamai](./akamai)
 
 Each proxy folder contains specific configuration files, setup instructions, and a Makefile to simplify deployment.
@@ -68,7 +70,8 @@ All hosted reverse proxy server been test on Linux Mint 22.1.
 | HAProxy         | 2.8.5-1ubuntu3.3 | `x-forwarded-for`  |
 | Cloudflare      | -                | `cf-connecting-ip` |
 | AWS API Gateway | v2               | `x-forwarded-for`  |
-| Akamai          | Propery Manager  | `true-client-ip`   |
+| AWS CloudFront  | -                | `x-forwarded-for`  |
+| Akamai          | Property Manager | `true-client-ip`   |
 
 ## Reference API
 
