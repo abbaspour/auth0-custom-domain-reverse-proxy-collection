@@ -40,6 +40,10 @@ terraform {
       source  = "hashicorp/null"
       version = ">= 3.2"
     }
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 6.25"
+    }
   }
 }
 
@@ -53,6 +57,10 @@ provider "auth0" {
 provider "cloudflare" {
   email   = var.cloudflare_email
   api_key = var.cloudflare_api_key
+}
+
+provider "aws" {
+  region = var.aws_region
 }
 
 provider "acme" {
