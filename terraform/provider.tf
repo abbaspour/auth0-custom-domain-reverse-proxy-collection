@@ -42,7 +42,7 @@ terraform {
     }
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 6.25"
+      version = "~> 6.32"
     }
   }
 }
@@ -61,12 +61,14 @@ provider "cloudflare" {
 
 provider "aws" {
   region = var.aws_region
+  profile = var.aws_profile
 }
 
 // Alias provider for resources that must be created in us-east-1 (e.g., CloudFront ACM certs)
 provider "aws" {
   alias  = "us_east_1"
   region = "us-east-1"
+  profile = var.aws_profile
 }
 
 provider "acme" {

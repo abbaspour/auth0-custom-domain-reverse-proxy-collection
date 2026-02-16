@@ -82,3 +82,9 @@ variable "aws_region" {
   type        = string
   default     = "ap-southeast-2"  # sydney
 }
+
+variable "aws_profile" {
+  description = "AWS profile name"
+  type        = string
+  default     = "default"
+}

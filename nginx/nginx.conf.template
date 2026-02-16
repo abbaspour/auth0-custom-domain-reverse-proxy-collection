@@ -37,7 +37,7 @@ http {
     
     # HTTP server for Let's Encrypt verification and redirect to HTTPS
     server {
-        listen 8080;
+        listen 1080;
         server_name ${DOMAIN_NAME};
         
         # Redirect all other HTTP requests to HTTPS
@@ -48,7 +48,7 @@ http {
 
     # HTTPS server
     server {
-        listen 8443 ssl;
+        listen 1443 ssl;
         server_name ${DOMAIN_NAME};
 
         ssl_certificate     ./fullchain.pem;

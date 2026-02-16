@@ -27,7 +27,7 @@ terraform-jwt-ca-public.pem: terraform-jwt-ca-private.pem
 	@echo "Keys generated: terraform-jwt-ca-private.pem and terraform-jwt-ca-public.pem"
 
 init:
-	terraform init
+	terraform init -upgrade
 
 plan:
 	terraform plan -out=tfplan
